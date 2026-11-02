@@ -4,364 +4,459 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VideoTube</title>
+<title>VideoTube Downloader</title>
 
 <style>
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  background: #0f0f0f;
-  color: white;
-  font-family: Arial, sans-serif;
-  overflow-x: hidden;
+    background: #0f0f0f;
+    color: white;
+    font-family: Arial, sans-serif;
 }
 
 /* Navbar */
-nav {
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 30px;
-  background: #181818;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+.navbar {
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    background: #181818;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .logo {
-  font-size: 25px;
-  font-weight: bold;
-  color: #ff0033;
-  letter-spacing: 1px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff0033;
 }
 
-.search-box {
-  display: flex;
-  gap: 10px;
+.logo span {
+    color: white;
 }
 
-.search-box input {
-  width: 350px;
-  padding: 12px;
-  border-radius: 25px;
-  border: 1px solid #444;
-  background: #222;
-  color: white;
-  outline: none;
+.search {
+    display: flex;
+    width: 45%;
 }
 
-button {
-  border: none;
-  cursor: pointer;
-  padding: 12px 20px;
-  border-radius: 25px;
-  background: #ff0033;
-  color: white;
-  transition: 0.3s;
+.search input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 25px 0 0 25px;
+    background: #121212;
+    color: white;
+    outline: none;
 }
 
-button:hover {
-  background: #cc0029;
-  transform: scale(1.05);
+.search button {
+    padding: 12px 20px;
+    border: 1px solid #333;
+    background: #333;
+    color: white;
+    border-radius: 0 25px 25px 0;
+    cursor: pointer;
 }
 
-/* Hero */
-.hero {
-  padding: 60px 20px;
-  text-align: center;
-  background:
-    radial-gradient(circle at top, #451020, transparent 60%),
-    #0f0f0f;
+/* Main */
+.container {
+    max-width: 950px;
+    margin: 40px auto;
+    padding: 20px;
 }
 
-.hero h1 {
-  font-size: 42px;
-  margin-bottom: 15px;
-  animation: fadeIn 1s ease;
+.heading {
+    text-align: center;
+    margin-bottom: 30px;
+    animation: fadeIn 1s ease;
 }
 
-.hero p {
-  color: #aaa;
-  margin-bottom: 30px;
+.heading h1 {
+    font-size: 35px;
+    margin-bottom: 12px;
 }
 
+.heading h1 span {
+    color: #ff0033;
+}
+
+.heading p {
+    color: #aaa;
+}
+
+/* Download Box */
 .download-box {
-  max-width: 650px;
-  margin: auto;
-  display: flex;
-  gap: 10px;
+    background: #181818;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #292929;
+    animation: slideUp 0.8s ease;
 }
 
 .download-box input {
-  flex: 1;
-  min-width: 0;
-  padding: 15px;
-  border-radius: 30px;
-  border: 1px solid #444;
-  background: #222;
-  color: white;
-  outline: none;
+    width: 100%;
+    padding: 15px;
+    background: #101010;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 15px;
 }
 
-/* Video preview */
-.preview {
-  max-width: 800px;
-  margin: 30px auto;
-  padding: 20px;
-  display: none;
+.download-box input:focus {
+    border-color: #ff0033;
 }
 
-.preview iframe,
-.preview video {
-  width: 100%;
-  aspect-ratio: 16/9;
-  border: none;
-  border-radius: 15px;
-  background: black;
+.buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.preview h2 {
-  margin: 15px 0;
+button {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.preview-btn {
+    background: #333;
+    color: white;
+    padding: 13px 22px;
+    border: none;
+    border-radius: 8px;
+}
+
+.download-btn {
+    background: #ff0033;
+    color: white;
+    padding: 13px 22px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.preview-btn:hover,
+.download-btn:hover {
+    transform: translateY(-3px);
+    opacity: 0.85;
+}
+
+.download-btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+}
+
+/* Video */
+.video-area {
+    margin-top: 25px;
+    display: none;
+    animation: fadeIn 0.7s ease;
+}
+
+.video-area video,
+.video-area iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    border: none;
+    background: black;
+}
+
+.status {
+    margin-top: 15px;
+    text-align: center;
+    color: #aaa;
+    min-height: 25px;
 }
 
 /* Cards */
-.section-title {
-  margin: 25px 30px;
-  font-size: 24px;
-}
-
-.video-grid {
-  padding: 20px 30px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px;
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+    margin-top: 40px;
 }
 
 .card {
-  background: #181818;
-  border-radius: 15px;
-  overflow: hidden;
-  transition: 0.4s;
-  animation: fadeIn 0.8s ease;
+    background: #181818;
+    padding: 20px;
+    border-radius: 12px;
+    transition: 0.3s;
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 30px #ff003322;
-}
-
-.thumbnail {
-  height: 160px;
-  background: linear-gradient(135deg, #ff0033, #4400ff);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 45px;
+    transform: translateY(-5px);
+    background: #252525;
 }
 
 .card h3 {
-  padding: 15px;
+    margin-bottom: 10px;
 }
 
 .card p {
-  padding: 0 15px 15px;
-  color: #aaa;
-}
-
-footer {
-  padding: 30px;
-  text-align: center;
-  color: #777;
+    color: #aaa;
+    font-size: 14px;
 }
 
 /* Animation */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media(max-width: 600px) {
-  nav {
-    padding: 0 15px;
-  }
+    .navbar {
+        padding: 0 12px;
+    }
 
-  .search-box input {
-    width: 120px;
-  }
+    .logo {
+        font-size: 19px;
+    }
 
-  .hero h1 {
-    font-size: 30px;
-  }
+    .search {
+        width: 55%;
+    }
 
-  .download-box {
-    flex-direction: column;
-  }
+    .heading h1 {
+        font-size: 26px;
+    }
+
+    .download-box {
+        padding: 18px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<nav>
-  <div class="logo">▶ VideoTube</div>
+<!-- Navbar -->
+<div class="navbar">
+    <div class="logo">▶ <span>VideoTube</span></div>
 
-  <div class="search-box">
-    <input type="text" id="search"
-      placeholder="Search videos...">
-    <button onclick="searchVideos()">Search</button>
-  </div>
-</nav>
-
-<section class="hero">
-  <h1>Watch. Explore. Enjoy.</h1>
-  <p>Your personal video hub</p>
-
-  <div class="download-box">
-    <input type="text" id="videoURL"
-      placeholder="Paste a YouTube or direct video URL">
-
-    <button onclick="loadVideo()">
-      Open Video
-    </button>
-  </div>
-</section>
-
-<div class="preview" id="preview">
-  <h2>Video Preview</h2>
-
-  <div id="player"></div>
-
-  <p id="message"
-    style="margin:15px 0;color:#aaa">
-  </p>
-
-  <button id="downloadBtn"
-    style="display:none;margin-top:15px">
-    Download Video
-  </button>
+    <div class="search">
+        <input type="text" id="searchInput"
+               placeholder="Search videos...">
+        <button onclick="searchVideos()">🔍</button>
+    </div>
 </div>
 
-<h2 class="section-title">Explore Videos</h2>
+<!-- Main -->
+<div class="container">
 
-<div class="video-grid" id="videoGrid">
+    <div class="heading">
+        <h1>Video <span>Downloader</span></h1>
+        <p>Preview and download videos you are authorized to save.</p>
+    </div>
 
-  <div class="card">
-    <div class="thumbnail">▶</div>
-    <h3>Video Preview</h3>
-    <p>Paste a video URL above to get started.</p>
-  </div>
+    <div class="download-box">
 
-  <div class="card">
-    <div class="thumbnail">🎬</div>
-    <h3>Your Video Hub</h3>
-    <p>Watch videos in a clean interface.</p>
-  </div>
+        <input type="text"
+               id="videoURL"
+               placeholder="Paste YouTube link or direct MP4 link here">
 
-  <div class="card">
-    <div class="thumbnail">✨</div>
-    <h3>Enjoy the Experience</h3>
-    <p>Simple design with smooth animations.</p>
-  </div>
+        <div class="buttons">
+            <button class="preview-btn" onclick="previewVideo()">
+                ▶ Preview Video
+            </button>
+
+            <button class="download-btn"
+                    id="downloadBtn"
+                    onclick="downloadVideo()">
+                ⬇ Download Video
+            </button>
+        </div>
+
+        <div class="video-area" id="videoArea"></div>
+
+        <div class="status" id="status">
+            Paste a video link to get started.
+        </div>
+
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>🎬 Video Preview</h3>
+            <p>Preview videos before downloading.</p>
+        </div>
+
+        <div class="card">
+            <h3>⚡ Fast Interface</h3>
+            <p>Simple and animated interface.</p>
+        </div>
+
+        <div class="card">
+            <h3>📥 Download</h3>
+            <p>Download direct video files you have permission to save.</p>
+        </div>
+
+    </div>
 
 </div>
-
-<footer>
-  VideoTube | Personal Video Hub
-</footer>
 
 <script>
-function loadVideo() {
-  const url = document.getElementById("videoURL").value.trim();
-  const preview = document.getElementById("preview");
-  const player = document.getElementById("player");
-  const message = document.getElementById("message");
-  const downloadBtn = document.getElementById("downloadBtn");
 
-  if (!url) {
-    alert("Please paste a video URL!");
-    return;
-  }
+const videoURL = document.getElementById("videoURL");
+const videoArea = document.getElementById("videoArea");
+const status = document.getElementById("status");
+const downloadBtn = document.getElementById("downloadBtn");
 
-  preview.style.display = "block";
-  player.innerHTML = "";
-  downloadBtn.style.display = "none";
+function isYouTube(url) {
+    return /youtube\.com|youtu\.be/i.test(url);
+}
 
-  // YouTube preview
-  const youtubeMatch = url.match(
-    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-  );
+function previewVideo() {
 
-  if (youtubeMatch) {
-    const videoId = youtubeMatch[1];
+    const url = videoURL.value.trim();
 
-    player.innerHTML = `
-      <iframe
-        src="https://www.youtube-nocookie.com/embed/${videoId}"
-        allowfullscreen>
-      </iframe>
+    if (!url) {
+        status.innerText = "Please paste a video link first.";
+        return;
+    }
+
+    videoArea.style.display = "block";
+
+    // YouTube preview
+    if (isYouTube(url)) {
+
+        let videoID = "";
+
+        try {
+            const parsedURL = new URL(url);
+
+            if (parsedURL.hostname.includes("youtu.be")) {
+                videoID = parsedURL.pathname.substring(1);
+            } else {
+                videoID = parsedURL.searchParams.get("v") || "";
+
+                if (!videoID && parsedURL.pathname.includes("/shorts/")) {
+                    videoID = parsedURL.pathname.split("/shorts/")[1];
+                }
+            }
+
+            videoID = videoID.split("/")[0];
+
+        } catch (error) {
+            status.innerText = "Invalid video URL.";
+            return;
+        }
+
+        if (!videoID) {
+            status.innerText = "Could not find the YouTube video ID.";
+            return;
+        }
+
+        videoArea.innerHTML = `
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/${videoID}"
+                allowfullscreen>
+            </iframe>
+        `;
+
+        status.innerText =
+            "YouTube preview loaded. Direct downloading is not supported.";
+
+        return;
+    }
+
+    // Direct video preview
+    videoArea.innerHTML = `
+        <video controls>
+            <source src="${url}">
+            Your browser does not support video.
+        </video>
     `;
 
-    message.innerText =
-      "YouTube video preview. Downloads are not available for YouTube links.";
+    status.innerText =
+        "Video preview loaded. If the link is a direct video file, you can try downloading it.";
+}
 
-    return;
-  }
+function downloadVideo() {
 
-  // Direct video file preview
-  if (url.match(/\.(mp4|webm|ogg)(\?.*)?$/i)) {
-    const video = document.createElement("video");
+    const url = videoURL.value.trim();
 
-    video.src = url;
-    video.controls = true;
-    video.playsInline = true;
+    if (!url) {
+        status.innerText = "Please paste a video link first.";
+        return;
+    }
 
-    player.appendChild(video);
+    if (isYouTube(url)) {
+        status.innerText =
+            "YouTube videos cannot be downloaded by this HTML page. Use YouTube's official download options where available.";
+        return;
+    }
 
-    message.innerText =
-      "Download is available for direct video files, subject to the source's permissions.";
+    if (!/^https?:\/\//i.test(url)) {
+        status.innerText = "Please enter a valid video URL.";
+        return;
+    }
 
-    downloadBtn.style.display = "inline-block";
+    downloadBtn.disabled = true;
+    downloadBtn.innerText = "⏳ Starting...";
 
-    downloadBtn.onclick = function() {
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "video";
-      link.target = "_blank";
+    status.innerText = "Opening video download...";
 
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    };
+    const link = document.createElement("a");
 
-    return;
-  }
+    link.href = url;
+    link.download = "video.mp4";
+    link.target = "_blank";
+    link.rel = "noopener";
 
-  message.innerText =
-    "Unsupported URL. Use a YouTube link or direct MP4/WebM video URL.";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => {
+        downloadBtn.disabled = false;
+        downloadBtn.innerText = "⬇ Download Video";
+        status.innerText =
+            "Download request sent. Some websites may open the video instead of downloading it.";
+    }, 1500);
 }
 
 function searchVideos() {
-  const search = document.getElementById("search").value.trim();
 
-  if (!search) return;
+    const query = document.getElementById("searchInput").value.trim();
 
-  window.open(
-    "https://www.youtube.com/results?search_query=" +
-    encodeURIComponent(search),
-    "_blank"
-  );
+    if (!query) {
+        return;
+    }
+
+    window.open(
+        "https://www.youtube.com/results?search_query=" +
+        encodeURIComponent(query),
+        "_blank"
+    );
 }
+
 </script>
 
 </body>
